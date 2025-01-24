@@ -18,15 +18,7 @@ module.exports = {
   plugins: [
     nextui({
       themes: {
-        dark: {
-          colors: {
-            primary: {
-              DEFAULT: "#ee6002",
-              // foreground: "#000000",
-            },
-            focus: "#BEF264",
-          },
-        },
+        dark: {},
       },
     }),
   ],

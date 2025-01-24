@@ -1,6 +1,5 @@
 import "@/styles/globals.css";
 import { Metadata, Viewport } from "next";
-import { Link } from "@nextui-org/link";
 import clsx from "clsx";
 
 import { Providers } from "./providers";
@@ -8,6 +7,9 @@ import { Providers } from "./providers";
 import { siteConfig } from "@/config/site";
 import { Navbar } from "@/components/navbar";
 import { fontPoppins } from "@/config/fonts";
+import Footer from "@/components/footer";
+import { AuthProvider } from "@/components/auth-provider";
+import { cookies } from "next/headers";
 
 export const metadata: Metadata = {
   title: {
@@ -27,11 +29,13 @@ export const viewport: Viewport = {
   ],
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const session = (await cookies()).get("session");
+  // console.log("session", session);
   return (
     <html suppressHydrationWarning lang="en">
       <head />
@@ -42,25 +46,15 @@ export default function RootLayout({
         )}
       >
         <Providers themeProps={{ attribute: "class", defaultTheme: "dark" }}>
-          <div className="relative flex flex-col h-screen">
-            <Navbar />
-            <main className="container mx-auto max-w-7xl px-6 flex-grow">
-              {children}
-            </main>
-            <footer className="w-full flex items-center justify-center py-3">
-              <Link
-                isExternal
-                className="flex items-center gap-1 text-current"
-                href="https://github.com/mirfanz"
-                title="Github Mirfanz"
-              >
-                <span className="text-default-600">
-                  <i>copyright &copy; 2025 by</i>
-                </span>
-                <p className="text-primary">Mirfanz</p>
-              </Link>
-            </footer>
-          </div>
+          <AuthProvider authProps={{ session: session?.value }}>
+            <div className="relative flex flex-col h-dvh">
+              <Navbar />
+              <main className="container mx-auto max-w-7xl px-6 flex-grow">
+                {children}
+              </main>
+              <Footer />
+            </div>
+          </AuthProvider>
         </Providers>
       </body>
     </html>

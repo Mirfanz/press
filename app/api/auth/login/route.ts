@@ -1,0 +1,33 @@
+import { account } from "@/lib/appwrite-admin";
+import { cookies } from "next/headers";
+import { NextRequest, NextResponse } from "next/server";
+
+export async function POST(request: NextRequest) {
+  const { email, password } = await request.json();
+  const cookie = await cookies();
+
+  try {
+    if (!email || !password) throw new Error("Email atau password harus diisi");
+
+    const session = await account.createEmailPasswordSession(email, password);
+
+    cookie.set("session", session.secret, {
+      httpOnly: true,
+      secure: true,
+      sameSite: "strict",
+      expires: new Date(session.expire),
+      path: "/",
+    });
+
+    return NextResponse.json(
+      { success: true, message: "Login berhasil" },
+      { status: 200 }
+    );
+  } catch (e: any) {
+    console.log("LOGIN ERROR: ", e.message);
+    return NextResponse.json(
+      { success: false, message: e.message },
+      { status: 400 }
+    );
+  }
+}
