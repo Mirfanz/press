@@ -5,9 +5,7 @@ import clsx from "clsx";
 import { Providers } from "./providers";
 
 import { siteConfig } from "@/config/site";
-import { Navbar } from "@/components/navbar";
 import { fontPoppins } from "@/config/fonts";
-import Footer from "@/components/footer";
 import { AuthProvider } from "@/components/auth-provider";
 import { cookies } from "next/headers";
 
@@ -35,9 +33,8 @@ export default async function RootLayout({
   children: React.ReactNode;
 }) {
   const session = (await cookies()).get("session");
-  // console.log("session", session);
   return (
-    <html suppressHydrationWarning lang="en">
+    <html suppressHydrationWarning lang="en" translate="no">
       <head />
       <body
         className={clsx(
@@ -47,13 +44,7 @@ export default async function RootLayout({
       >
         <Providers themeProps={{ attribute: "class", defaultTheme: "dark" }}>
           <AuthProvider authProps={{ session: session?.value }}>
-            <div className="relative flex flex-col h-dvh">
-              <Navbar />
-              <main className="container mx-auto max-w-7xl px-6 flex-grow">
-                {children}
-              </main>
-              <Footer />
-            </div>
+            {children}
           </AuthProvider>
         </Providers>
       </body>

@@ -1,3 +1,4 @@
+import Footer from "@/components/footer";
 import { Navbar } from "@/components/navbar";
 
 export default function SiteLayout({
@@ -6,10 +7,17 @@ export default function SiteLayout({
   children: React.ReactNode;
 }) {
   return (
-    <section className="flex flex-col items-center justify-center gap-4 py-8 md:py-10">
-      <div className="inline-block max-w-lg text-center justify-center">
+    <div className="relative flex flex-col h-dvh">
+      <Navbar />
+      <main className="container mx-auto max-w-7xl px-3 pt-2 lg:px-6 flex-grow">
         {children}
-      </div>
-    </section>
+      </main>
+      <Footer />
+    </div>
+    // <section className="py-3 md:py-6">
+    //   <div className="inline-block max-w-lg text-center justify-center">
+    //     {children}
+    //   </div>
+    // </section>
   );
 }

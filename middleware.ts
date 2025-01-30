@@ -29,14 +29,9 @@ export async function middleware(request: NextRequest) {
     }
 
     return NextResponse.next();
-  } catch (error) {
-    console.log("User not authenticated:", error);
-    return NextResponse.redirect(
-      new URL(
-        `/auth/login?redirect_url=${encodeURIComponent(request.url)}`,
-        request.url
-      )
-    );
+  } catch (error: any) {
+    console.log("User not authenticated:", error.message);
+    return NextResponse.redirect(new URL("/auth/login", request.url));
   }
 }
 

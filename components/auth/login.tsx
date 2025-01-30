@@ -1,18 +1,18 @@
 "use client";
 
-import { account } from "@/lib/appwrite-client";
-import { Button, Card, CardBody, Form, Input } from "@nextui-org/react";
-import axios from "axios";
+import { Alert, Button, Card, CardBody, Form, Input } from "@heroui/react";
 import { KeyRoundIcon, MailIcon } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
 import React from "react";
+import { useAuth } from "../auth-provider";
 
 type Props = {};
 
 const Login = (props: Props) => {
-  const searchParams = useSearchParams();
-  const router = useRouter();
+  const auth = useAuth();
   const [isLoading, setIsLoading] = React.useState(false);
+  const [isError, setIsError] = React.useState<string | null>(null);
+
   const [fields, setFields] = React.useState({
     email: "",
     password: "",
@@ -26,24 +26,22 @@ const Login = (props: Props) => {
   const handleFormLogin = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsLoading(true);
+    setIsError(null);
     const { email, password } = fields;
 
-    if (!email || !password) return setIsLoading(false);
+    if (!email || !password) {
+      setTimeout(() => {
+        setIsError("Email dan Password wajib diisi");
+        setIsLoading(false);
+      }, 250);
+      return;
+    }
 
-    axios
-      .post("/api/auth/login", { email, password })
-      .then((res) => {
-        console.log("res", res);
-        if (res.data.success) {
-          alert("Login Success");
-          router.replace(
-            decodeURIComponent(searchParams.get("redirect_url") || "/")
-          );
-        }
-      })
+    auth
+      .login(email, password)
+      .then((res) => {})
       .catch((err) => {
-        console.log("err", err);
-        alert("Login Gagal");
+        setIsError("Password atau Email salah");
         setIsLoading(false);
       });
   };
@@ -53,12 +51,19 @@ const Login = (props: Props) => {
         <h1 className="text-4xl font-bold text-foreground text-center mb-6">
           PRESS II
         </h1>
+
+        <Alert
+          variant="bordered"
+          color="danger"
+          className="mb-3 animate-appearance-in"
+          isVisible={isError ? true : false}
+          description={isError ?? "Login Gagal"}
+        />
         <Form onSubmit={handleFormLogin}>
           <Input
             type="email"
             placeholder="Email"
             startContent={<MailIcon />}
-            isRequired
             name="email"
             value={fields.email}
             onChange={handleFieldChange}
@@ -68,7 +73,6 @@ const Login = (props: Props) => {
             type="password"
             placeholder="Password"
             startContent={<KeyRoundIcon />}
-            isRequired
             name="password"
             value={fields.password}
             onChange={handleFieldChange}
@@ -77,7 +81,8 @@ const Login = (props: Props) => {
             type="submit"
             isLoading={isLoading}
             fullWidth
-            className="mt-2"
+            className="mt-2 mx-auto"
+            color="warning"
           >
             LOGIN
           </Button>
