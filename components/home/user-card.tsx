@@ -1,19 +1,16 @@
 "use client";
 
-import { account } from "@/lib/appwrite-client";
-import { Button } from "@heroui/button";
 import React, { useState } from "react";
-
-import { useAuth } from "./auth-provider";
+import { useAuth } from "../auth-provider";
 import {
   Avatar,
+  Button,
   Card,
   CardBody,
   Divider,
   Modal,
   ModalBody,
   ModalContent,
-  ModalFooter,
   ModalHeader,
   Skeleton,
 } from "@heroui/react";
@@ -21,11 +18,11 @@ import { LogOutIcon } from "lucide-react";
 
 type Props = {};
 
-const Home = (props: Props) => {
+const UserCard = (props: Props) => {
   const { user, logout } = useAuth();
   const [detailOpen, setDetailOpen] = useState(false);
   return (
-    <section>
+    <>
       <Card>
         <CardBody>
           {user ? (
@@ -101,8 +98,8 @@ const Home = (props: Props) => {
           </ModalBody>
         </ModalContent>
       </Modal>
-    </section>
+    </>
   );
 };
 
-export default Home;
+export default UserCard;

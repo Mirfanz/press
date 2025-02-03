@@ -1,11 +1,9 @@
 "use client";
 
-import React from "react";
-
 type Props = {};
 
 const Cash = (props: Props) => {
-  return <div>Cash</div>;
+  return <main>Cash</main>;
 };
 
 export default Cash;

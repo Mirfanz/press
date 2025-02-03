@@ -1,23 +1,18 @@
-import Footer from "@/components/footer";
-import { Navbar } from "@/components/navbar";
+"use client";
+
+import { useAuth } from "@/components/auth-provider";
+import { useRouter } from "next/navigation";
+import Loading from "./loading";
 
 export default function SiteLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  return (
-    <div className="relative flex flex-col h-dvh">
-      <Navbar />
-      <main className="container mx-auto max-w-7xl px-3 pt-2 lg:px-6 flex-grow">
-        {children}
-      </main>
-      <Footer />
-    </div>
-    // <section className="py-3 md:py-6">
-    //   <div className="inline-block max-w-lg text-center justify-center">
-    //     {children}
-    //   </div>
-    // </section>
-  );
+  const { loadingUser, user } = useAuth();
+  const router = useRouter();
+
+  if (loadingUser) return <Loading />;
+  else if (!user) return router.replace("/auth/login");
+  return <div className="px-3 lg:px-6 pt-3">{children}</div>;
 }

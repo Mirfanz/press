@@ -30,7 +30,15 @@ import {
 import { usePathname } from "next/navigation";
 import { useAuth } from "./auth-provider";
 
-export const Navbar = () => {
+const Navbar = () => {
+  const pathname = usePathname();
+  if (pathname.startsWith("/auth")) return <NavbarAuth />;
+  return <NavbarSite />;
+};
+
+export default Navbar;
+
+const NavbarSite = () => {
   const pathname = usePathname();
   const auth = useAuth();
   return (
@@ -93,7 +101,7 @@ export const Navbar = () => {
   );
 };
 
-export const AuthNavbar = () => {
+const NavbarAuth = () => {
   return (
     <NextUINavbar maxWidth="xl" position="sticky">
       <NavbarContent>

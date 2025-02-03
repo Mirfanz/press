@@ -5,6 +5,7 @@ import { KeyRoundIcon, MailIcon } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
 import React from "react";
 import { useAuth } from "../auth-provider";
+import Loading from "@/app/auth/loading";
 
 type Props = {};
 
@@ -37,59 +38,65 @@ const Login = (props: Props) => {
       return;
     }
 
-    auth
-      .login(email, password)
-      .then((res) => {})
-      .catch((err) => {
+    auth.login(email, password).then((res) => {
+      if (!res.success) {
         setIsError("Password atau Email salah");
         setIsLoading(false);
-      });
+      }
+    });
   };
-  return (
-    <Card className="max-w-full">
-      <CardBody className="w-96 max-w-full p-6">
-        <h1 className="text-4xl font-bold text-foreground text-center mb-6">
-          PRESS II
-        </h1>
 
-        <Alert
-          variant="bordered"
-          color="danger"
-          className="mb-3 animate-appearance-in"
-          isVisible={isError ? true : false}
-          description={isError ?? "Login Gagal"}
-        />
-        <Form onSubmit={handleFormLogin}>
-          <Input
-            type="email"
-            placeholder="Email"
-            startContent={<MailIcon />}
-            name="email"
-            value={fields.email}
-            onChange={handleFieldChange}
-            // autoComplete="off"
+  const { loadingUser, user } = useAuth();
+  const router = useRouter();
+
+  if (loadingUser) return <Loading />;
+  else if (user) router.replace("/");
+  else
+    return (
+      <Card className="max-w-full">
+        <CardBody className="w-96 max-w-full p-6">
+          <h1 className="text-4xl font-bold text-foreground text-center mb-6">
+            PRESS II
+          </h1>
+
+          <Alert
+            variant="bordered"
+            color="danger"
+            className="mb-3 animate-appearance-in"
+            isVisible={isError ? true : false}
+            description={isError ?? "Login Gagal"}
           />
-          <Input
-            type="password"
-            placeholder="Password"
-            startContent={<KeyRoundIcon />}
-            name="password"
-            value={fields.password}
-            onChange={handleFieldChange}
-          />
-          <Button
-            type="submit"
-            isLoading={isLoading}
-            fullWidth
-            className="mt-2 mx-auto"
-            color="warning"
-          >
-            LOGIN
-          </Button>
-        </Form>
-      </CardBody>
-    </Card>
-  );
+          <Form onSubmit={handleFormLogin}>
+            <Input
+              type="email"
+              placeholder="Email"
+              startContent={<MailIcon />}
+              name="email"
+              value={fields.email}
+              onChange={handleFieldChange}
+              // autoComplete="off"
+            />
+            <Input
+              type="password"
+              placeholder="Password"
+              startContent={<KeyRoundIcon />}
+              name="password"
+              value={fields.password}
+              onChange={handleFieldChange}
+            />
+            <Button
+              type="submit"
+              isLoading={isLoading}
+              fullWidth
+              className="mt-2 mx-auto"
+              color="warning"
+            >
+              LOGIN
+            </Button>
+          </Form>
+        </CardBody>
+      </Card>
+    );
 };
 
 export default Login;

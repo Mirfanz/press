@@ -1,21 +1,24 @@
 "use client";
 
 import { account } from "@/lib/appwrite-client";
+import { isProtected } from "@/lib/utils";
 import {
   Button,
+  Card,
+  CardBody,
   Modal,
   ModalBody,
   ModalContent,
   ModalFooter,
   ModalHeader,
   ModalProps,
+  Spinner,
   useModal,
 } from "@heroui/react";
 import { Models } from "appwrite";
 import axios, { AxiosResponse } from "axios";
 import { XIcon } from "lucide-react";
-import { useRouter, useSearchParams } from "next/navigation";
-import { title } from "process";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import {
   createContext,
   ReactNode,
@@ -23,12 +26,17 @@ import {
   useEffect,
   useState,
 } from "react";
-import Swal from "sweetalert2";
 
 const AuthContext = createContext<{
   user?: Models.User<Models.Preferences>;
   logout: () => void;
-  login: (email: string, password: string) => Promise<AxiosResponse<any, any>>;
+  login: (
+    email: string,
+    password: string
+  ) => Promise<{ success: boolean; message: string }>;
+  loadingUser: boolean;
+  loadingLogin: boolean;
+  loadingLogout: boolean;
 } | null>(null);
 
 export const AuthProvider = ({
@@ -41,48 +49,76 @@ export const AuthProvider = ({
   const [user, setUser] = useState<Models.User<Models.Preferences>>();
   const router = useRouter();
   const searchParams = useSearchParams();
-  const [logoutModalOpen, setLogOutModalOpen] = useState(false);
-  const [logoutLoading, setLogOutLoading] = useState(false);
+  const pathname = usePathname();
+  const [loadingUser, setLoadingUser] = useState(true);
+  const [loadingLogin, setLoadingLogin] = useState(false);
+  const [loadingLogout, setLoadingLogout] = useState(false);
 
-  useEffect(() => {
-    if (authProps.session) {
-      account.client.setSession(authProps.session);
-      account.get().then((resp) => {
-        setUser(resp);
-      });
-    }
-  }, []);
+  const [logoutModalOpen, setLogOutModalOpen] = useState(false);
 
   const login = async (email: string, password: string) => {
-    // const result = await account.createEmailPasswordSession(email, password);
-    // console.log("result", result.secret);
-    return axios.post("/api/auth/login", { email, password }).then((res) => {
-      router.replace("/");
-      return res;
-    });
+    setLoadingLogin(true);
+    return account
+      .createEmailPasswordSession(email, password)
+      .then(async (res) => {
+        console.log("Login Success", res);
+        setUser(await account.get());
+
+        return { success: true, message: "Login Success" };
+      })
+      .catch((err) => {
+        console.log("Login Gagal", err.message);
+        return { success: false, message: "Login Failed" };
+      })
+      .finally(() => setLoadingLogin(false));
   };
 
   const handleLogout = async () => {
-    setLogOutLoading(true);
+    setLoadingLogout(true);
     setLogOutModalOpen(false);
-    axios
-      .post("/api/auth/logout")
+    return account
+      .deleteSession("current")
       .then(() => {
-        router.refresh();
-        return true;
+        setUser(undefined);
+        return { success: true, message: "Logout Success" };
       })
-      .catch(() => {
-        return false;
+      .catch((err) => {
+        return { success: false, message: "Logout Failed" };
       })
-      .finally(() => setLogOutLoading(false));
+      .finally(() => setLoadingLogout(false));
   };
 
   const logout = () => {
     setLogOutModalOpen(true);
   };
 
+  useEffect(() => {
+    console.log("UseEffect 1");
+
+    account
+      .get()
+      .then((res) => {
+        setUser(res);
+        console.log("Sudah Login", res);
+      })
+      .catch((err) => {
+        setUser(undefined);
+        console.log("Belum Login", err);
+      })
+      .finally(() => setLoadingUser(false));
+  }, []);
+
   return (
-    <AuthContext.Provider value={{ user, logout, login }}>
+    <AuthContext.Provider
+      value={{
+        user,
+        logout,
+        login,
+        loadingUser,
+        loadingLogin,
+        loadingLogout,
+      }}
+    >
       {children}
       <Modal
         isOpen={logoutModalOpen}
@@ -94,14 +130,14 @@ export const AuthProvider = ({
           <ModalBody>Anda akan keluar dari akun ini</ModalBody>
           <ModalFooter>
             <Button
-              isLoading={logoutLoading}
+              isLoading={loadingLogout}
               onPress={handleLogout}
               color="danger"
             >
               Logout
             </Button>
             <Button
-              disabled={logoutLoading}
+              disabled={loadingLogout}
               onPress={() => setLogOutModalOpen(false)}
             >
               Cancel

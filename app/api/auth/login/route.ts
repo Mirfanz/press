@@ -12,7 +12,7 @@ export async function POST(request: NextRequest) {
 
     const session = await account.createEmailPasswordSession(email, password);
     const res = NextResponse.json(
-      { success: true, message: "Login berhasil" },
+      { success: true, message: "Login berhasil", secret: session.secret },
       { status: 200 }
     );
 
