@@ -1,15 +1,17 @@
 import "@/styles/globals.css";
 import { Metadata, Viewport } from "next";
 import clsx from "clsx";
+import { Suspense } from "react";
 
 import { Providers } from "./providers";
+import Loading from "./loading";
 
 import { siteConfig } from "@/config/site";
 import { fontPoppins } from "@/config/fonts";
 import { AuthProvider } from "@/components/auth-provider";
-import { cookies } from "next/headers";
 import Navbar from "@/components/navbar";
 import Footer from "@/components/footer";
+import QueryProvider from "@/components/query-provider";
 
 export const metadata: Metadata = {
   title: {
@@ -34,25 +36,26 @@ export default async function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const session = (await cookies()).get("session");
   return (
     <html suppressHydrationWarning lang="en" translate="no">
       <head />
       <body
         className={clsx(
           "min-h-screen bg-background font-sans antialiased",
-          fontPoppins.className
+          fontPoppins.className,
         )}
       >
         <Providers themeProps={{ attribute: "class", defaultTheme: "dark" }}>
-          <AuthProvider authProps={{ session: session?.value }}>
-            <div className="relative flex flex-col h-dvh">
-              <Navbar />
-              <div className="container mx-auto max-w-7xl flex-grow">
-                {children}
+          <AuthProvider>
+            <QueryProvider>
+              <div className="relative flex flex-col h-dvh">
+                <Navbar />
+                <div className="container mx-auto max-w-7xl flex-grow">
+                  <Suspense fallback={<Loading />}>{children}</Suspense>
+                </div>
+                <Footer />
               </div>
-              <Footer />
-            </div>
+            </QueryProvider>
           </AuthProvider>
         </Providers>
       </body>

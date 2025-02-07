@@ -1,10 +1,9 @@
 "use client";
+
 import { Card, CardBody, Spinner } from "@heroui/react";
 import React from "react";
 
-type Props = {};
-
-const Loading = (props: Props) => {
+const Loading = () => {
   return (
     <div className="flex items-center justify-center fixed top-0 bottom-0 left-0 right-0">
       <Card className="m-auto animate-pulse">

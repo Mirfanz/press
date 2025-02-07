@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useState } from "react";
-import { useAuth } from "../auth-provider";
 import {
   Avatar,
   Button,
@@ -16,11 +15,12 @@ import {
 } from "@heroui/react";
 import { LogOutIcon } from "lucide-react";
 
-type Props = {};
+import { useAuth } from "../auth-provider";
 
-const UserCard = (props: Props) => {
+const UserCard = () => {
   const { user, logout } = useAuth();
   const [detailOpen, setDetailOpen] = useState(false);
+
   return (
     <>
       <Card>
@@ -47,17 +47,17 @@ const UserCard = (props: Props) => {
             </div>
           )}
           <div className="mt-4 flex items-center justify-end gap-2">
-            <Button className="" fullWidth onPress={() => setDetailOpen(true)}>
+            <Button fullWidth className="" onPress={() => setDetailOpen(true)}>
               Detail
             </Button>
-            <Button className="" fullWidth>
+            <Button fullWidth className="">
               Edit
             </Button>
             <Button
               fullWidth
+              color="danger"
               startContent={<LogOutIcon className="w-4 h-4" />}
               onPress={logout}
-              color="danger"
             >
               Keluar
             </Button>
@@ -70,11 +70,7 @@ const UserCard = (props: Props) => {
           <ModalHeader>Informasi Akun</ModalHeader>
           <Divider />
           <ModalBody className="py-4">
-            <Avatar
-              src="/default-profile.png"
-              className="w-56 h-56 mx-auto"
-              // radius="md"
-            />
+            <Avatar className="w-56 h-56 mx-auto" src="/default-profile.png" />
             <div className="flex">
               <p className="w-20">Nama</p>
               <p>: {user?.name}</p>

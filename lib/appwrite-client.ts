@@ -1,7 +1,8 @@
 "use client";
 
-import { appwriteConfig } from "@/config/appwrite";
 import { Client, Account } from "appwrite";
+
+import { appwriteConfig } from "@/config/appwrite";
 
 const client = new Client()
   .setEndpoint(appwriteConfig.endpoint)

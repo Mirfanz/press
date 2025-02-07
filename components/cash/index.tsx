@@ -1,121 +1,150 @@
 "use client";
 
-import { formatIDR } from "@/lib/utils";
-import { Card, CardBody, Link, Select, SelectItem } from "@heroui/react";
+import { Alert, Button, Card, CardBody } from "@heroui/react";
+import { useQuery } from "@tanstack/react-query";
+import axios from "axios";
+import { useEffect, useState } from "react";
+import { PlusIcon, Trash2Icon } from "lucide-react";
+import clsx from "clsx";
+import Swal from "sweetalert2";
+
+import Loading from "../loading";
+
+import AddReport from "./add-report";
 import ReportCard from "./report-card";
 
-type Props = {};
+import { CashReportType } from "@/types";
+import { compareDate, formatDate, formatIDR } from "@/lib/utils";
 
-const Cash = (props: Props) => {
-  const fakeReport = [
-    {
-      $id: "1",
-      time: new Date(),
-      amount: 115000,
-      income: false,
-      label: "Beli Gembok",
+let lastDate = new Date();
+
+const Cash = () => {
+  const [activeReport, setActiveReport] = useState<string>();
+
+  const [modalAddReportOpen, setModalAddReportOpen] = useState(false);
+  const [balance, setBalance] = useState(0);
+
+  const { data, error, isLoading, refetch } = useQuery({
+    queryKey: ["get-cash-resport"],
+    queryFn: async (): Promise<CashReportType[]> => {
+      const response = await axios.get("/api/cash/report");
+
+      return response.data.data;
     },
-    {
-      $id: "2",
-      time: new Date(),
-      amount: 400000,
-      income: true,
-      label: "Kas Bulan Februari",
-    },
-    {
-      $id: "3",
-      time: new Date(),
-      amount: 350000,
-      income: false,
-      label: "Membeli obat-obatan",
-    },
-    {
-      $id: "4",
-      time: new Date(),
-      amount: 200000,
-      income: true,
-      label: "Penjualan Barang",
-    },
-    {
-      $id: "5",
-      time: new Date(),
-      amount: 150000,
-      income: false,
-      label: "Pembelian Alat Tulis",
-    },
-    {
-      $id: "6",
-      time: new Date(),
-      amount: 500000,
-      income: true,
-      label: "Pendapatan Proyek",
-    },
-    {
-      $id: "7",
-      time: new Date(),
-      amount: 250000,
-      income: false,
-      label: "Pembelian Buku",
-    },
-    {
-      $id: "8",
-      time: new Date(),
-      amount: 300000,
-      income: true,
-      label: "Penjualan Produk",
-    },
-    {
-      $id: "9",
-      time: new Date(),
-      amount: 450000,
-      income: false,
-      label: "Pembayaran Listrik",
-    },
-    {
-      $id: "10",
-      time: new Date(),
-      amount: 600000,
-      income: true,
-      label: "Pendapatan Konsultasi",
-    },
-    {
-      $id: "11",
-      time: new Date(),
-      amount: 100000,
-      income: false,
-      label: "Pembelian Kopi",
-    },
-    {
-      $id: "12",
-      time: new Date(),
-      amount: 750000,
-      income: true,
-      label: "Penjualan Software",
-    },
-  ];
+  });
+
+  const deleteReport = (item: CashReportType) => {
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "red",
+      confirmButtonText: "Yes, delete it!",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        axios
+          .delete("/api/cash/report", {
+            data: { id: item.$id },
+          })
+          .then(() => {
+            refetch();
+          });
+      }
+    });
+  };
+
+  useEffect(() => {
+    let total = 0;
+
+    data?.map((item) =>
+      item.income ? (total += item.amount) : (total -= item.amount),
+    );
+    setBalance(total);
+  }, [data]);
+
   return (
     <main>
       <Card className="shadow-lg rounded-lg overflow-hidden">
         <CardBody className="p-6 bg-gradient-to-r from-green-400 to-blue-500 text-white">
           <h2 className="text-lg">Sisa Saldo</h2>
-          <p className="text-2xl font-bold">Rp {formatIDR(33005000)}</p>
+          <p className="text-2xl font-bold">Rp {formatIDR(balance)}</p>
         </CardBody>
       </Card>
+
       <section className="mt-5">
         <div className="flex items-center justify-between mb-3 mx-1">
           <h5 className="font-semibold">Laporan Keuangan</h5>
-          <Select className="w-28" size="sm" placeholder="Filter">
-            <SelectItem isSelected>Semua</SelectItem>
-            <SelectItem>Bulan Ini</SelectItem>
-            <SelectItem>7 Hari</SelectItem>
-            <SelectItem>30 Hari</SelectItem>
-          </Select>
-        </div>
 
-        {fakeReport.map((item) => (
-          <ReportCard data={item} key={item.$id} />
-        ))}
+          <Button size="sm" onPress={() => setModalAddReportOpen(true)}>
+            <PlusIcon className="w-4 h-4" /> Tambah
+          </Button>
+        </div>
+        {isLoading ? (
+          <Loading />
+        ) : error ? (
+          <Alert
+            color="danger"
+            description="Gagal mengambil data laporan keuangan, muat ulang halaman ini."
+            title="Terjadi Kesalahan"
+          />
+        ) : (
+          <div className="flex flex-col gap-3">
+            {data?.map((item, index) => {
+              const currentDate = new Date(item.date);
+              const showDate =
+                compareDate(currentDate, lastDate) == "older" || index == 0;
+
+              lastDate = currentDate;
+
+              return (
+                <>
+                  {showDate && (
+                    <h5
+                      className={clsx(
+                        "text-sm font-medium",
+                        index > 0 && "mt-3",
+                      )}
+                    >
+                      {formatDate(currentDate)}
+                    </h5>
+                  )}
+                  <div className="flex items-center gap-3">
+                    <ReportCard
+                      key={"cash-" + item.$id}
+                      data={item}
+                      toggleActive={() =>
+                        setActiveReport((prev) =>
+                          prev == item.$id ? undefined : item.$id,
+                        )
+                      }
+                    />
+                    {activeReport == item.$id && (
+                      <Button
+                        isIconOnly
+                        className="animate-appearance-in"
+                        color="danger"
+                        size="sm"
+                        variant="shadow"
+                        onPress={() => deleteReport(item)}
+                      >
+                        <Trash2Icon className="w-5 h-5" />
+                      </Button>
+                    )}
+                  </div>
+                </>
+              );
+            })}
+          </div>
+        )}
       </section>
+      <AddReport
+        isOpen={modalAddReportOpen}
+        refetch={() => refetch()}
+        onClose={() => setModalAddReportOpen(false)}
+      >
+        s
+      </AddReport>
     </main>
   );
 };

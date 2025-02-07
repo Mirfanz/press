@@ -2,14 +2,14 @@
 
 import { Alert, Button, Card, CardBody, Form, Input } from "@heroui/react";
 import { KeyRoundIcon, MailIcon } from "lucide-react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 import React from "react";
+
 import { useAuth } from "../auth-provider";
+
 import Loading from "@/app/auth/loading";
 
-type Props = {};
-
-const Login = (props: Props) => {
+const Login = () => {
   const auth = useAuth();
   const [isLoading, setIsLoading] = React.useState(false);
   const [isError, setIsError] = React.useState<string | null>(null);
@@ -21,6 +21,7 @@ const Login = (props: Props) => {
 
   const handleFieldChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
+
     setFields((prev) => ({ ...prev, [name]: value }));
   };
 
@@ -35,6 +36,7 @@ const Login = (props: Props) => {
         setIsError("Email dan Password wajib diisi");
         setIsLoading(false);
       }, 250);
+
       return;
     }
 
@@ -60,36 +62,36 @@ const Login = (props: Props) => {
           </h1>
 
           <Alert
-            variant="bordered"
-            color="danger"
             className="mb-3 animate-appearance-in"
-            isVisible={isError ? true : false}
+            color="danger"
             description={isError ?? "Login Gagal"}
+            isVisible={isError ? true : false}
+            variant="bordered"
           />
           <Form onSubmit={handleFormLogin}>
             <Input
-              type="email"
+              name="email"
               placeholder="Email"
               startContent={<MailIcon />}
-              name="email"
+              type="email"
               value={fields.email}
               onChange={handleFieldChange}
               // autoComplete="off"
             />
             <Input
-              type="password"
+              name="password"
               placeholder="Password"
               startContent={<KeyRoundIcon />}
-              name="password"
+              type="password"
               value={fields.password}
               onChange={handleFieldChange}
             />
             <Button
-              type="submit"
-              isLoading={isLoading}
               fullWidth
               className="mt-2 mx-auto"
               color="warning"
+              isLoading={isLoading}
+              type="submit"
             >
               LOGIN
             </Button>

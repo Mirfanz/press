@@ -7,32 +7,22 @@ import {
   NavbarMenuToggle,
   NavbarBrand,
   NavbarItem,
-  NavbarMenuItem,
 } from "@heroui/navbar";
-import { Button } from "@heroui/button";
-import { Kbd } from "@heroui/kbd";
-import { Link } from "@heroui/link";
-import { Input } from "@heroui/input";
-import { link as linkStyles, button as buttonStyle } from "@heroui/theme";
+import { button as buttonStyle } from "@heroui/theme";
 import NextLink from "next/link";
 import clsx from "clsx";
+import { usePathname } from "next/navigation";
+
+import { useAuth } from "./auth-provider";
 
 import { siteConfig } from "@/config/site";
 import { ThemeSwitch } from "@/components/theme-switch";
-import {
-  TwitterIcon,
-  GithubIcon,
-  DiscordIcon,
-  HeartFilledIcon,
-  SearchIcon,
-  Logo,
-} from "@/components/icons";
-import { usePathname } from "next/navigation";
-import { useAuth } from "./auth-provider";
 
 const Navbar = () => {
   const pathname = usePathname();
+
   if (pathname.startsWith("/auth")) return <NavbarAuth />;
+
   return <NavbarSite />;
 };
 
@@ -41,24 +31,32 @@ export default Navbar;
 const NavbarSite = () => {
   const pathname = usePathname();
   const auth = useAuth();
+
   return (
     <NextUINavbar maxWidth="xl" position="sticky">
       <NavbarContent>
         <NavbarBrand>
-          <NextLink href="/" className="flex items-center gap-1">
-            <Logo />
+          <NextLink className="flex items-center gap-1" href="/">
+            <svg className="w-8 h-8" fill="none" viewBox="0 0 32 32">
+              <path
+                clipRule="evenodd"
+                d="M17.6482 10.1305L15.8785 7.02583L7.02979 22.5499H10.5278L17.6482 10.1305ZM19.8798 14.0457L18.11 17.1983L19.394 19.4511H16.8453L15.1056 22.5499H24.7272L19.8798 14.0457Z"
+                fill="currentColor"
+                fillRule="evenodd"
+              />
+            </svg>
             <h2 className="font-bold text-inherit">PRESS II</h2>
           </NextLink>
         </NavbarBrand>
-        <NavbarContent justify="center" className="hidden lg:flex">
+        <NavbarContent className="hidden lg:flex" justify="center">
           {siteConfig.navItems.map((item) => (
             <NavbarItem key={item.href}>
               <NextLink
-                href={item.href}
                 className={clsx(
-                  "font-normal text-foreground hover:opacity-80 duration-150 data-[active=true]:text-primary data-[active=true]:font-semibold"
+                  "font-normal text-foreground hover:opacity-80 duration-150 data-[active=true]:text-primary data-[active=true]:font-semibold",
                 )}
                 data-active={pathname === item.href}
+                href={item.href}
               >
                 {item.label}
               </NextLink>
@@ -74,7 +72,7 @@ const NavbarSite = () => {
                 variant: "flat",
                 isIconOnly: true,
                 radius: "sm",
-              })
+              }),
             )}
           />
         </NavbarContent>
@@ -82,11 +80,11 @@ const NavbarSite = () => {
           {siteConfig.navItems.map((item) => (
             <NavbarItem key={item.href}>
               <NextLink
-                href={item.href}
                 className={clsx(
-                  "font-normal text-foreground hover:opacity-80 duration-150 data-[active=true]:text-primary data-[active=true]:font-semibold"
+                  "font-normal text-foreground hover:opacity-80 duration-150 data-[active=true]:text-primary data-[active=true]:font-semibold",
                 )}
                 data-active={pathname === item.href}
+                href={item.href}
               >
                 {item.label}
               </NextLink>
@@ -106,8 +104,15 @@ const NavbarAuth = () => {
     <NextUINavbar maxWidth="xl" position="sticky">
       <NavbarContent>
         <NavbarBrand>
-          <NextLink href="/" className="flex items-center gap-1">
-            <Logo />
+          <NextLink className="flex items-center gap-1" href="/">
+            <svg className="w-8 h-8" fill="none" viewBox="0 0 32 32">
+              <path
+                clipRule="evenodd"
+                d="M17.6482 10.1305L15.8785 7.02583L7.02979 22.5499H10.5278L17.6482 10.1305ZM19.8798 14.0457L18.11 17.1983L19.394 19.4511H16.8453L15.1056 22.5499H24.7272L19.8798 14.0457Z"
+                fill="currentColor"
+                fillRule="evenodd"
+              />
+            </svg>
             <h2 className="font-bold text-inherit">PRESS II</h2>
           </NextLink>
         </NavbarBrand>

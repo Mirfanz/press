@@ -1,34 +1,33 @@
 "use client";
 
-import { formatIDR } from "@/lib/utils";
 import { Card, CardBody } from "@heroui/react";
 import clsx from "clsx";
 import React from "react";
 
+import { CashReportType } from "@/types";
+import { formatIDR } from "@/lib/utils";
+
 type Props = {
-  data: {
-    $id: string;
-    time: Date;
-    amount: number;
-    income: boolean;
-    label: string;
-  };
+  data: CashReportType;
+  toggleActive?: () => void;
 };
 
-const ReportCard = ({ data }: Props) => {
+const ReportCard = ({ data, toggleActive }: Props) => {
   return (
-    <Card className="mb-2 hover:brightness-95 dark:hover:brightness-125 hover:scale-[1.02] !duration-150">
+    <Card
+      fullWidth
+      isHoverable
+      className="hover:scale-[1.02]"
+      onDoubleClick={toggleActive}
+    >
       <CardBody className="flex-row items-center gap-1">
         <div className="flex-grow">
           <p className="line-clamp-1 text-sm">{data.label}</p>
-          <small className="text-foreground-500 text-xs">
-            {data.time.toLocaleDateString()}
-          </small>
         </div>
         <h5
           className={clsx(
             data.income ? "text-success" : "text-danger",
-            "font-semibold min-w-max"
+            "font-semibold min-w-max",
           )}
         >
           {data.income ? "+" : "-"}

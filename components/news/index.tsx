@@ -1,10 +1,8 @@
 "use client";
 
-import { Card, CardBody, CardHeader, Image } from "@heroui/react";
+import { Card, CardBody, Image } from "@heroui/react";
 
-type Props = {};
-
-const News = (props: Props) => {
+const News = () => {
   const fakeNews: {
     $id: string;
     title: string;
@@ -101,16 +99,23 @@ const News = (props: Props) => {
       created_at: new Date(),
     },
   ];
+
   return (
     <main>
       <div className="grid grid-cols-1 gap-4">
         {fakeNews.map((news) => (
-          <Card key={news.$id}>
+          <Card
+            key={news.$id}
+            isBlurred
+            isFooterBlurred
+            isHoverable
+            isPressable
+          >
             {news.image_url ? (
               <div className="overflow-hidden">
                 <Image
-                  src={news.image_url}
                   className="hover:scale-105 aspect-video rounded-none"
+                  src={news.image_url}
                 />
               </div>
             ) : (

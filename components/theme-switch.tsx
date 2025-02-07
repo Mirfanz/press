@@ -6,8 +6,7 @@ import { SwitchProps, useSwitch } from "@heroui/switch";
 import { useTheme } from "next-themes";
 import { useIsSSR } from "@react-aria/ssr";
 import clsx from "clsx";
-
-import { SunFilledIcon, MoonFilledIcon } from "@/components/icons";
+import { MoonStarIcon, SunIcon } from "lucide-react";
 
 export interface ThemeSwitchProps {
   className?: string;
@@ -71,9 +70,9 @@ export const ThemeSwitch: FC<ThemeSwitchProps> = ({
         })}
       >
         {!isSelected || isSSR ? (
-          <SunFilledIcon size={22} />
+          <SunIcon className="w-5 h-5" />
         ) : (
-          <MoonFilledIcon size={22} />
+          <MoonStarIcon className="w-5 h-5" />
         )}
       </div>
     </Component>

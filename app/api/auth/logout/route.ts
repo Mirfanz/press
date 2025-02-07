@@ -1,9 +1,10 @@
-import { appwriteConfig } from "@/config/appwrite";
 import { cookies } from "next/headers";
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 import { Account, Client } from "node-appwrite";
 
-export async function POST(request: NextRequest) {
+import { appwriteConfig } from "@/config/appwrite";
+
+export async function POST() {
   try {
     const cookie = await cookies();
     const session = cookie.get("session")?.value;
@@ -25,13 +26,14 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json(
       { success: true, message: "Logout Success" },
-      { status: 200 }
+      { status: 200 },
     );
   } catch (e: any) {
     console.log("LOGIN ERROR: ", e.message);
+
     return NextResponse.json(
       { success: false, message: e.message },
-      { status: 400 }
+      { status: 400 },
     );
   }
 }

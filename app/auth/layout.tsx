@@ -1,5 +1,6 @@
-import Footer from "@/components/footer";
-import Navbar from "@/components/navbar";
+import { Suspense } from "react";
+
+import Loading from "../loading";
 
 export default function AuthLayout({
   children,
@@ -8,7 +9,7 @@ export default function AuthLayout({
 }) {
   return (
     <div className="flex justify-center items-center w-full h-full px-4">
-      {children}
+      <Suspense fallback={<Loading />}>{children}</Suspense>
     </div>
   );
 }

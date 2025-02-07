@@ -3,9 +3,7 @@
 import { Link } from "@heroui/link";
 import React from "react";
 
-type Props = {};
-
-const Footer = (props: Props) => {
+const Footer = () => {
   return (
     <footer className="w-full flex items-center justify-center py-3">
       <Link

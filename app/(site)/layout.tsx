@@ -1,8 +1,11 @@
 "use client";
 
-import { useAuth } from "@/components/auth-provider";
 import { useRouter } from "next/navigation";
+import { Suspense } from "react";
+
 import Loading from "./loading";
+
+import { useAuth } from "@/components/auth-provider";
 
 export default function SiteLayout({
   children,
@@ -14,5 +17,10 @@ export default function SiteLayout({
 
   if (loadingUser) return <Loading />;
   else if (!user) return router.replace("/auth/login");
-  return <div className="px-3 lg:px-6 pt-3">{children}</div>;
+
+  return (
+    <div className="px-3 lg:px-6 pt-3">
+      <Suspense fallback={<Loading />}>{children}</Suspense>
+    </div>
+  );
 }

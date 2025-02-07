@@ -1,5 +1,6 @@
+import { Account, Client, Databases } from "node-appwrite";
+
 import { appwriteConfig } from "@/config/appwrite";
-import { Account, Client } from "node-appwrite";
 
 const adminClient = new Client()
   .setEndpoint(appwriteConfig.endpoint)
@@ -8,3 +9,5 @@ const adminClient = new Client()
   .setSelfSigned(true);
 
 export const account = new Account(adminClient);
+
+export const db = new Databases(adminClient);
