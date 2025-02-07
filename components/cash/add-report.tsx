@@ -34,7 +34,6 @@ const AddReport = (props: Omit<ModalProps, "children"> & Props) => {
     e.preventDefault();
     if (!(e.target as HTMLFormElement).checkValidity()) return;
     const { isConfirmed } = await Swal.fire({
-      // title: "Tambah",
       text: "Apakah data yang dimasukkan sudah sesuai?",
       icon: "question",
       showCancelButton: true,
@@ -121,8 +120,8 @@ const AddReport = (props: Omit<ModalProps, "children"> & Props) => {
             />
           </ModalBody>
           <ModalFooter className="">
-            <Button fullWidth color="primary" type="submit">
-              Tambah
+            <Button fullWidth isLoading={loading} color="primary" type="submit">
+              {loading ? "Menambahkan" : "Tambah"}
             </Button>
           </ModalFooter>
         </ModalContent>
