@@ -71,7 +71,10 @@ const UserCard = () => {
           <ModalHeader>Informasi Akun</ModalHeader>
           <Divider />
           <ModalBody className="py-4">
-            <Avatar className="w-56 h-56 mx-auto" src="/default-profile.png" />
+            <Avatar
+              className="w-56 h-56 mx-auto"
+              src={user?.prefs.image_url || "/default-profile.png"}
+            />
             <div className="flex">
               <p className="w-20">Nama</p>
               <p>: {user?.name}</p>
