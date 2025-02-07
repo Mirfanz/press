@@ -6,6 +6,7 @@ import React from "react";
 
 import { CashReportType } from "@/types";
 import { formatIDR } from "@/lib/utils";
+import { useAuth } from "../auth-provider";
 
 type Props = {
   data: CashReportType;
@@ -13,12 +14,14 @@ type Props = {
 };
 
 const ReportCard = ({ data, toggleActive }: Props) => {
+  const { hasRole } = useAuth();
   return (
     <Card
       fullWidth
       isHoverable
       className="hover:scale-[1.02]"
-      onDoubleClick={toggleActive}
+      isPressable={hasRole("bendahara")}
+      onPress={toggleActive}
     >
       <CardBody className="flex-row items-center gap-1">
         <div className="flex-grow">
@@ -27,7 +30,7 @@ const ReportCard = ({ data, toggleActive }: Props) => {
         <h5
           className={clsx(
             data.income ? "text-success" : "text-danger",
-            "font-semibold min-w-max",
+            "font-semibold min-w-max"
           )}
         >
           {data.income ? "+" : "-"}

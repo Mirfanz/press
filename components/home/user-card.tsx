@@ -6,6 +6,7 @@ import {
   Button,
   Card,
   CardBody,
+  Chip,
   Divider,
   Modal,
   ModalBody,
@@ -30,7 +31,7 @@ const UserCard = () => {
               <Avatar
                 alt="User Profile"
                 className="w-16 h-16"
-                src={"/default-profile.png"}
+                src={user.prefs.image_url || "/default-profile.png"}
               />
               <div>
                 <h2 className="text-xl font-semibold">{user.name}</h2>
@@ -74,6 +75,17 @@ const UserCard = () => {
             <div className="flex">
               <p className="w-20">Nama</p>
               <p>: {user?.name}</p>
+            </div>
+            <div className="flex">
+              <p className="w-20">Role</p>
+              <p>
+                :{" "}
+                {user?.labels.map((label) => (
+                  <Chip key={"user-label-" + label} className="me-1">
+                    {label}
+                  </Chip>
+                ))}
+              </p>
             </div>
             <div className="flex">
               <p className="w-20">Email</p>

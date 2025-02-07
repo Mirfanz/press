@@ -24,11 +24,12 @@ const AuthContext = createContext<{
   logout: () => void;
   login: (
     email: string,
-    password: string,
+    password: string
   ) => Promise<{ success: boolean; message: string }>;
   loadingUser: boolean;
   loadingLogin: boolean;
   loadingLogout: boolean;
+  hasRole: (...role: string[]) => boolean;
 } | null>(null);
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
@@ -36,8 +37,14 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [loadingUser, setLoadingUser] = useState(true);
   const [loadingLogin, setLoadingLogin] = useState(false);
   const [loadingLogout, setLoadingLogout] = useState(false);
-
   const [logoutModalOpen, setLogOutModalOpen] = useState(false);
+
+  const hasRole = (...role: string[]) => {
+    for (let i = 0; i < role.length; i++) {
+      if (user?.labels.includes(role[i])) return true;
+    }
+    return false;
+  };
 
   const login = async (email: string, password: string) => {
     setLoadingLogin(true);
@@ -80,18 +87,10 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   };
 
   useEffect(() => {
-    console.log("UseEffect 1");
-
     account
       .get()
-      .then((res) => {
-        setUser(res);
-        console.log("Sudah Login", res);
-      })
-      .catch((err) => {
-        setUser(undefined);
-        console.log("Belum Login", err);
-      })
+      .then((res) => setUser(res))
+      .catch(() => setUser(undefined))
       .finally(() => setLoadingUser(false));
   }, []);
 
@@ -104,6 +103,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         loadingUser,
         loadingLogin,
         loadingLogout,
+        hasRole,
       }}
     >
       {children}

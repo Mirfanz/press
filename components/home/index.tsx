@@ -30,7 +30,7 @@ const Home = () => {
           </Link>
         </div>
         <Alert
-          className="mb-2"
+          className="mb-3"
           color="danger"
           description="Bayar kalau gamau dipecatt"
           title="Belum Bayar Kas"

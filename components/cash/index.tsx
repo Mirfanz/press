@@ -4,7 +4,7 @@ import { Alert, Button, Card, CardBody } from "@heroui/react";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { PlusIcon, Trash2Icon } from "lucide-react";
+import { AlertCircle, PlusIcon, Trash2Icon } from "lucide-react";
 import clsx from "clsx";
 import Swal from "sweetalert2";
 
@@ -15,12 +15,14 @@ import ReportCard from "./report-card";
 
 import { CashReportType } from "@/types";
 import { compareDate, formatDate, formatIDR } from "@/lib/utils";
+import { useAuth } from "../auth-provider";
 
 let lastDate = new Date();
 
 const Cash = () => {
-  const [activeReport, setActiveReport] = useState<string>();
+  const { hasRole } = useAuth();
 
+  const [activeReport, setActiveReport] = useState<string>();
   const [modalAddReportOpen, setModalAddReportOpen] = useState(false);
   const [balance, setBalance] = useState(0);
 
@@ -58,7 +60,7 @@ const Cash = () => {
     let total = 0;
 
     data?.map((item) =>
-      item.income ? (total += item.amount) : (total -= item.amount),
+      item.income ? (total += item.amount) : (total -= item.amount)
     );
     setBalance(total);
   }, [data]);
@@ -72,13 +74,24 @@ const Cash = () => {
         </CardBody>
       </Card>
 
-      <section className="mt-5">
-        <div className="flex items-center justify-between mb-3 mx-1">
+      <section className="mt-6">
+        <div className="flex items-center justify-between mb-4 mx-1">
           <h5 className="font-semibold">Laporan Keuangan</h5>
-
-          <Button size="sm" onPress={() => setModalAddReportOpen(true)}>
-            <PlusIcon className="w-4 h-4" /> Tambah
-          </Button>
+          {hasRole("bendahara") ? (
+            <Button size="sm" onPress={() => setModalAddReportOpen(true)}>
+              <PlusIcon className="w-4 h-4" /> Tambah
+            </Button>
+          ) : (
+            <Button
+              size="sm"
+              isIconOnly
+              isDisabled
+              variant="light"
+              radius="full"
+            >
+              <AlertCircle className="w-4 h-4" />
+            </Button>
+          )}
         </div>
         {isLoading ? (
           <Loading />
@@ -103,7 +116,7 @@ const Cash = () => {
                     <h5
                       className={clsx(
                         "text-sm font-medium",
-                        index > 0 && "mt-3",
+                        index > 0 && "mt-3"
                       )}
                     >
                       {formatDate(currentDate)}
@@ -115,11 +128,11 @@ const Cash = () => {
                       data={item}
                       toggleActive={() =>
                         setActiveReport((prev) =>
-                          prev == item.$id ? undefined : item.$id,
+                          prev == item.$id ? undefined : item.$id
                         )
                       }
                     />
-                    {activeReport == item.$id && (
+                    {activeReport == item.$id && hasRole("bendahara") && (
                       <Button
                         isIconOnly
                         className="animate-appearance-in"
@@ -138,13 +151,13 @@ const Cash = () => {
           </div>
         )}
       </section>
-      <AddReport
-        isOpen={modalAddReportOpen}
-        refetch={() => refetch()}
-        onClose={() => setModalAddReportOpen(false)}
-      >
-        s
-      </AddReport>
+      {hasRole("bendahara") && (
+        <AddReport
+          isOpen={modalAddReportOpen}
+          refetch={() => refetch()}
+          onClose={() => setModalAddReportOpen(false)}
+        />
+      )}
     </main>
   );
 };
