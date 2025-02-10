@@ -4,17 +4,19 @@ import { Card, CardBody } from "@heroui/react";
 import clsx from "clsx";
 import React from "react";
 
-import { CashReportType } from "@/types";
-import { formatIDR } from "@/lib/utils";
 import { useAuth } from "../auth-provider";
 
+import { FinanceReportType } from "@/types";
+import { formatIDR } from "@/lib/utils";
+
 type Props = {
-  data: CashReportType;
+  data: FinanceReportType;
   toggleActive?: () => void;
 };
 
 const ReportCard = ({ data, toggleActive }: Props) => {
   const { hasRole } = useAuth();
+
   return (
     <Card
       fullWidth
@@ -30,7 +32,7 @@ const ReportCard = ({ data, toggleActive }: Props) => {
         <h5
           className={clsx(
             data.income ? "text-success" : "text-danger",
-            "font-semibold min-w-max"
+            "font-semibold min-w-max",
           )}
         >
           {data.income ? "+" : "-"}

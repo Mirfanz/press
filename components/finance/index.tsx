@@ -9,13 +9,13 @@ import clsx from "clsx";
 import Swal from "sweetalert2";
 
 import Loading from "../loading";
+import { useAuth } from "../auth-provider";
 
 import AddReport from "./add-report";
 import ReportCard from "./report-card";
 
-import { CashReportType } from "@/types";
+import { FinanceReportType } from "@/types";
 import { compareDate, formatDate, formatIDR } from "@/lib/utils";
-import { useAuth } from "../auth-provider";
 
 let lastDate = new Date();
 
@@ -27,15 +27,15 @@ const Cash = () => {
   const [balance, setBalance] = useState(0);
 
   const { data, error, isLoading, refetch } = useQuery({
-    queryKey: ["get-cash-resport"],
-    queryFn: async (): Promise<CashReportType[]> => {
-      const response = await axios.get("/api/cash/report");
+    queryKey: ["finance-report"],
+    queryFn: async (): Promise<FinanceReportType[]> => {
+      const response = await axios.get("/api/finance/report");
 
       return response.data.data;
     },
   });
 
-  const deleteReport = (item: CashReportType) => {
+  const deleteReport = (item: FinanceReportType) => {
     Swal.fire({
       title: "Are you sure?",
       text: "You won't be able to revert this!",
@@ -46,7 +46,7 @@ const Cash = () => {
     }).then((result) => {
       if (result.isConfirmed) {
         axios
-          .delete("/api/cash/report", {
+          .delete("/api/finance/report", {
             data: { id: item.$id },
           })
           .then(() => {
@@ -60,7 +60,7 @@ const Cash = () => {
     let total = 0;
 
     data?.map((item) =>
-      item.income ? (total += item.amount) : (total -= item.amount)
+      item.income ? (total += item.amount) : (total -= item.amount),
     );
     setBalance(total);
   }, [data]);
@@ -83,11 +83,11 @@ const Cash = () => {
             </Button>
           ) : (
             <Button
-              size="sm"
-              isIconOnly
               isDisabled
-              variant="light"
+              isIconOnly
               radius="full"
+              size="sm"
+              variant="light"
             >
               <AlertCircle className="w-4 h-4" />
             </Button>
@@ -116,7 +116,7 @@ const Cash = () => {
                     <h5
                       className={clsx(
                         "text-sm font-medium",
-                        index > 0 && "mt-3"
+                        index > 0 && "mt-3",
                       )}
                     >
                       {formatDate(currentDate)}
@@ -124,11 +124,11 @@ const Cash = () => {
                   )}
                   <div className="flex items-center gap-3">
                     <ReportCard
-                      key={"cash-" + item.$id}
+                      key={"finance-" + item.$id}
                       data={item}
                       toggleActive={() =>
                         setActiveReport((prev) =>
-                          prev == item.$id ? undefined : item.$id
+                          prev == item.$id ? undefined : item.$id,
                         )
                       }
                     />

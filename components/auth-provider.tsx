@@ -24,7 +24,7 @@ const AuthContext = createContext<{
   logout: () => void;
   login: (
     email: string,
-    password: string
+    password: string,
   ) => Promise<{ success: boolean; message: string }>;
   loadingUser: boolean;
   loadingLogin: boolean;
@@ -43,6 +43,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     for (let i = 0; i < role.length; i++) {
       if (user?.labels.includes(role[i])) return true;
     }
+
     return false;
   };
 

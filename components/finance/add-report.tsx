@@ -40,10 +40,11 @@ const AddReport = (props: Omit<ModalProps, "children"> & Props) => {
       confirmButtonText: "Ya, lanjut",
       cancelButtonText: "Belum",
     });
+
     if (!isConfirmed) return;
     setLoading(true);
     axios
-      .post("/api/cash/report", addReportFields)
+      .post("/api/finance/report", addReportFields)
       .then((resp) => {
         console.log("resp", resp);
         props.onClose?.();
@@ -60,9 +61,9 @@ const AddReport = (props: Omit<ModalProps, "children"> & Props) => {
         <ModalContent className="">
           <ModalBody className="pt-8">
             <Select
-              label="Jenis Laporan"
-              required
               isRequired
+              required
+              label="Jenis Laporan"
               placeholder=" "
               onSelectionChange={(e) =>
                 setAddReportFields({
@@ -75,11 +76,11 @@ const AddReport = (props: Omit<ModalProps, "children"> & Props) => {
               <SelectItem key="cost">Pengeluaran</SelectItem>
             </Select>
             <Input
-              required
               isRequired
-              name="amount"
+              required
               label="Jumlah (Rp)"
               min={1}
+              name="amount"
               placeholder="Masukan angka saja"
               type="number"
               value={addReportFields.amount?.toString()}
@@ -91,11 +92,11 @@ const AddReport = (props: Omit<ModalProps, "children"> & Props) => {
               }
             />
             <Input
-              required
               isRequired
-              name="date"
+              required
               label="Tanggal"
               labelPlacement="inside"
+              name="date"
               type="date"
               value={addReportFields.date}
               onChange={(e) =>
@@ -106,10 +107,10 @@ const AddReport = (props: Omit<ModalProps, "children"> & Props) => {
               }
             />
             <Textarea
-              required
               isRequired
-              name="label"
+              required
               label="Keterangan"
+              name="label"
               value={addReportFields.label}
               onChange={(e) =>
                 setAddReportFields({
@@ -120,7 +121,7 @@ const AddReport = (props: Omit<ModalProps, "children"> & Props) => {
             />
           </ModalBody>
           <ModalFooter className="">
-            <Button fullWidth isLoading={loading} color="primary" type="submit">
+            <Button fullWidth color="primary" isLoading={loading} type="submit">
               {loading ? "Menambahkan" : "Tambah"}
             </Button>
           </ModalFooter>

@@ -9,33 +9,35 @@ export const siteConfig = {
       href: "/",
     },
     {
-      label: "Berita",
-      href: "/news",
-    },
-    {
       label: "Keuangan",
-      href: "/cash",
+      href: "/finance",
     },
-  ],
-  navMenuItems: [
     {
-      label: "Beranda",
-      href: "/",
+      label: "Kas",
+      href: "/finance/tax",
     },
     {
       label: "Berita",
       href: "/news",
-    },
-    {
-      label: "Keuangan",
-      href: "/cash",
     },
   ],
   links: {
     github: "https://github.com/mirfanz",
-    instagram: "https://twitter.com/getnextui",
-    whatsapp: "https://nextui.org",
-    discord: "https://discord.gg/9b6yyZKmH4",
-    sponsor: "https://patreon.com/jrgarciadev",
+    instagram: "https://instagram.com/mirfanz",
   },
 };
+
+export const monthString = [
+  "Januari",
+  "Februari",
+  "Maret",
+  "April",
+  "Mei",
+  "Juni",
+  "Juli",
+  "Agustus",
+  "September",
+  "Oktober",
+  "November",
+  "Desember",
+];
