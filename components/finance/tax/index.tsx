@@ -55,12 +55,10 @@ const Tax = (props: Props) => {
               isHoverable
               isPressable
               as={Link}
-              href={`/finance/tax/${tax.$id}`}
+              href={`/finance/tax/${tax.year}/${tax.month}`}
             >
               <CardBody className="flex-row items-center">
-                <p className="me-auto">
-                  {monthString[parseInt(tax.$id.split(".")[1]) - 1]}
-                </p>
+                <p className="me-auto">{monthString[tax.month - 1]}</p>
                 <Chip
                   color="success"
                   size="sm"

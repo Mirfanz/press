@@ -12,12 +12,12 @@ export async function GET(request: NextRequest) {
     ]);
 
     const data: TaxType[] = result.documents.map(
-      ({ $id, $createdAt, $updatedAt, code, users }) => ({
+      ({ $id, $createdAt, $updatedAt, code, users, month, year }) => ({
         $id,
         code,
         users,
-        year: parseInt($id.split(".")?.[0]),
-        month: parseInt($id.split(".")?.[1]),
+        year,
+        month,
         $createdAt,
         $updatedAt,
       }),

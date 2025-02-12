@@ -1,16 +1,21 @@
 "use client";
 
-import { Card, CardBody, User } from "@heroui/react";
-import React from "react";
+import { Input } from "@heroui/react";
+import React, { useState } from "react";
+import { SearchIcon } from "lucide-react";
+
+import UserCard from "./user-card";
 
 import { monthString } from "@/config/site";
-import { TaxType } from "@/types";
+import { TaxType, UserType } from "@/types";
 
 type Props = {
   tax: TaxType<true>;
 };
 
 const TaxDetail = ({ tax }: Props) => {
+  const [search, setSearch] = useState<string>();
+
   return (
     <section>
       <h2 className="text-center text-lg mb-6">
@@ -20,20 +25,41 @@ const TaxDetail = ({ tax }: Props) => {
         </span>
       </h2>
 
-      <div className="flex flex-col gap-3">
-        {tax.users.map((user) => (
-          <Card key={"tax-user-" + user.$id} isHoverable isPressable>
-            <CardBody>
-              <User
-                avatarProps={{
-                  src: user.prefs.image_url || "/default-profile.png",
-                }}
-                className="justify-start"
-                description={user.$id}
-                name={user.name}
-              />
-            </CardBody>
-          </Card>
+      <Input
+        className="mb-6"
+        color="primary"
+        endContent={<SearchIcon className="w-5 h-5 me-1ss" />}
+        placeholder="Pencarian "
+        size="lg"
+        type="search"
+        value={search}
+        variant="faded"
+        onChange={(e) => setSearch(e.target.value)}
+      />
+      <div className="flex flex-col gap-3 h-full overflow-auto">
+        {tax.users.map((user: UserType) => (
+          <UserCard
+            key={"users-" + user.$id}
+            color="danger"
+            isVisible={
+              search
+                ? user.name.toLowerCase().includes(search.toLowerCase())
+                : true
+            }
+            user={user}
+          />
+        ))}
+        {tax.paidUsers.map((user: UserType) => (
+          <UserCard
+            key={"users-" + user.$id}
+            color="success"
+            isVisible={
+              search
+                ? user.name.toLowerCase().includes(search.toLowerCase())
+                : true
+            }
+            user={user}
+          />
         ))}
       </div>
     </section>

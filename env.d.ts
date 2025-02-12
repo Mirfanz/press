@@ -3,5 +3,6 @@ declare namespace NodeJS {
     NODE_ENV: "development" | "production" | "test";
     APPWRITE_API_KEY: string;
     NEXT_PUBLIC_HOSTNAME: string;
+    CRON_SECRET: string;
   }
 }

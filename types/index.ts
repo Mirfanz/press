@@ -22,6 +22,7 @@ export type TaxType<WithUsers extends boolean = false> = WithUsers extends true
       year: number;
       month: number;
       users: UserType[];
+      paidUsers: UserType[];
     }
   : {
       $id: string;
@@ -37,6 +38,7 @@ export type UserType = {
   $id: string;
   name: string;
   labels: string[];
+  status: boolean;
   prefs: {
     image_url?: string;
   };
