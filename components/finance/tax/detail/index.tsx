@@ -39,8 +39,8 @@ const TaxDetail = ({ tax }: Props) => {
       <div className="flex flex-col gap-3 h-full overflow-auto">
         {tax.users.map((user: UserType) => (
           <UserCard
+            taxId={tax.$id}
             key={"users-" + user.$id}
-            color="danger"
             isVisible={
               search
                 ? user.name.toLowerCase().includes(search.toLowerCase())
@@ -52,7 +52,8 @@ const TaxDetail = ({ tax }: Props) => {
         {tax.paidUsers.map((user: UserType) => (
           <UserCard
             key={"users-" + user.$id}
-            color="success"
+            isPaid
+            taxId={tax.$id}
             isVisible={
               search
                 ? user.name.toLowerCase().includes(search.toLowerCase())

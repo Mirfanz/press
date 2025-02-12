@@ -59,16 +59,14 @@ const Tax = (props: Props) => {
             >
               <CardBody className="flex-row items-center">
                 <p className="me-auto">{monthString[tax.month - 1]}</p>
-                <Chip
-                  color="success"
-                  size="sm"
-                  startContent={
-                    <UsersRoundIcon className="w-3 h-3 me-1 ms-2" />
-                  }
-                  variant="flat"
-                >
-                  {tax.users.length}
-                </Chip>
+
+                <small className="flex gap-1 text-foreground-600">
+                  <span className="text-success">{tax.paidUsers.length}</span>|
+                  <span className="text-danger">
+                    {tax.paidUsers.length + tax.users.length}
+                  </span>
+                  orang
+                </small>
               </CardBody>
             </Card>
           ))}

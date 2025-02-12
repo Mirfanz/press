@@ -32,6 +32,7 @@ export type TaxType<WithUsers extends boolean = false> = WithUsers extends true
       month: number;
       code: number;
       users: string[];
+      paidUsers: string[];
     };
 
 export type UserType = {
