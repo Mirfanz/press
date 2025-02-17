@@ -1,6 +1,6 @@
 "use client";
 
-import { Card, CardBody, Image } from "@heroui/react";
+import { Card, CardFooter, Image } from "@heroui/react";
 
 const News = () => {
   const fakeNews: {
@@ -24,6 +24,8 @@ const News = () => {
       title: "Local Hero Saves Child from Drowning",
       description:
         "A local man is being hailed as a hero after saving a child from drowning at the community pool.",
+      image_url:
+        "https://mediacenter.batam.go.id/wp-content/uploads/sites/60/2025/02/475796015_1057403019753568_6623738602179016102_n.jpg",
       created_at: new Date(),
     },
     {
@@ -102,7 +104,7 @@ const News = () => {
 
   return (
     <main>
-      <div className="grid grid-cols-1 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
         {fakeNews.map((news) => (
           <Card
             key={news.$id}
@@ -111,25 +113,12 @@ const News = () => {
             isHoverable
             isPressable
           >
-            {news.image_url ? (
-              <div className="overflow-hidden">
-                <Image
-                  className="hover:scale-105 aspect-video rounded-none"
-                  src={news.image_url}
-                />
-              </div>
-            ) : (
-              ""
-            )}
-            <CardBody>
-              <h2 className="font-medium text-sm mt-1 mb-2">{news.title}</h2>
-              <p className="text-xs text-foreground-500 line-clamp-2">
-                {news.description}
+            <Image loading="lazy" src={news.image_url} />
+            <CardFooter className="absolute z-10 bottom-0">
+              <p className="line-clamp-2 font-medium text-start">
+                {news.title}
               </p>
-              <small className="text-xs text-foreground-400 mt-2">
-                {news.created_at.toLocaleString()}
-              </small>
-            </CardBody>
+            </CardFooter>
           </Card>
         ))}
       </div>

@@ -109,6 +109,7 @@ const AddReport = (props: Omit<ModalProps, "children"> & Props) => {
             <Textarea
               isRequired
               required
+              isMultiline={false}
               label="Keterangan"
               name="label"
               value={addReportFields.label}

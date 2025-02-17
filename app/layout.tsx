@@ -9,8 +9,6 @@ import Loading from "./loading";
 import { siteConfig } from "@/config/site";
 import { fontPoppins } from "@/config/fonts";
 import { AuthProvider } from "@/components/auth-provider";
-import Navbar from "@/components/navbar";
-import Footer from "@/components/footer";
 import QueryProvider from "@/components/query-provider";
 
 export const metadata: Metadata = {
@@ -48,13 +46,7 @@ export default async function RootLayout({
         <Providers themeProps={{ attribute: "class", defaultTheme: "dark" }}>
           <AuthProvider>
             <QueryProvider>
-              <div className="relative flex flex-col h-dvh">
-                <Navbar />
-                <div className="container mx-auto max-w-7xl flex-grow">
-                  <Suspense fallback={<Loading />}>{children}</Suspense>
-                </div>
-                <Footer />
-              </div>
+              <Suspense fallback={<Loading />}>{children}</Suspense>
             </QueryProvider>
           </AuthProvider>
         </Providers>

@@ -17,7 +17,7 @@ const TaxDetail = ({ tax }: Props) => {
   const [search, setSearch] = useState<string>();
 
   return (
-    <section>
+    <section className="overflow-visible">
       <h2 className="text-center text-lg mb-6">
         Laporan Kas{" "}
         <span className="text-primary font-semibold">
@@ -39,13 +39,13 @@ const TaxDetail = ({ tax }: Props) => {
       <div className="flex flex-col gap-3 h-full overflow-auto">
         {tax.users.map((user: UserType) => (
           <UserCard
-            taxId={tax.$id}
             key={"users-" + user.$id}
             isVisible={
               search
                 ? user.name.toLowerCase().includes(search.toLowerCase())
                 : true
             }
+            taxId={tax.$id}
             user={user}
           />
         ))}
@@ -53,12 +53,12 @@ const TaxDetail = ({ tax }: Props) => {
           <UserCard
             key={"users-" + user.$id}
             isPaid
-            taxId={tax.$id}
             isVisible={
               search
                 ? user.name.toLowerCase().includes(search.toLowerCase())
                 : true
             }
+            taxId={tax.$id}
             user={user}
           />
         ))}

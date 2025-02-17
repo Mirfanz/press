@@ -5,7 +5,7 @@ import React from "react";
 
 const Loading = () => {
   return (
-    <div className="flex items-center justify-center fixed top-0 bottom-0 left-0 right-0">
+    <div className="flex items-center justify-center absolute top-0 bottom-0 left-0 right-0">
       <Card className="m-auto animate-pulse">
         <CardBody className="flex-row gap-4 items-center">
           <Spinner />

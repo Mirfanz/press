@@ -1,9 +1,9 @@
 "use client";
 
-import { Card, CardBody, Chip, Select, SelectItem } from "@heroui/react";
+import { Card, CardBody, Select, SelectItem } from "@heroui/react";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
-import { ChevronsUpDownIcon, UsersRoundIcon } from "lucide-react";
+import { ChevronsUpDownIcon } from "lucide-react";
 import Link from "next/link";
 import React, { useEffect } from "react";
 

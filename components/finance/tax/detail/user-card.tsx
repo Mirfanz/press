@@ -1,15 +1,14 @@
 "use client";
 
-import { Alert, AlertProps, Button, Card, CardBody, User } from "@heroui/react";
+import { Button, Card, CardBody, User } from "@heroui/react";
 import clsx from "clsx";
 import React, { useEffect, useState } from "react";
-
-import { UserType } from "@/types";
-import { useAuth } from "@/components/auth-provider";
 import axios from "axios";
-import { revalidatePath } from "next/cache";
-import { usePathname, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 import Swal from "sweetalert2";
+
+import { useAuth } from "@/components/auth-provider";
+import { UserType } from "@/types";
 
 type Props = {
   user: UserType;
@@ -28,18 +27,20 @@ const UserCard = ({
   const { hasRole } = useAuth();
   const router = useRouter();
   const [loading, setLoading] = useState(false);
+
   useEffect(() => {
     setIsPaid(ispaid);
   }, [ispaid]);
+
   return (
     <Card
+      isHoverable
+      isPressable
       className={clsx(
         "w-full ring-1 ring-inset",
         isPaid ? "ring-success order-2" : "ring-danger order-1",
-        !isVisible && "hidden"
+        !isVisible && "hidden",
       )}
-      isHoverable
-      isPressable
     >
       <CardBody className="flex-row justify-between items-center">
         <User
@@ -52,8 +53,9 @@ const UserCard = ({
         />
         {!isPaid && hasRole("bendahara") && (
           <Button
-            isLoading={loading}
             className=""
+            isLoading={loading}
+            size="sm"
             onPress={() => {
               Swal.fire({
                 icon: "warning",
@@ -76,7 +78,6 @@ const UserCard = ({
                   .finally(() => setLoading(false));
               });
             }}
-            size="sm"
           >
             Konfirmasi
           </Button>

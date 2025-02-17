@@ -111,6 +111,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       <Modal
         isOpen={logoutModalOpen}
         placement="center"
+        size="xs"
         onClose={() => setLogOutModalOpen(false)}
       >
         <ModalContent>

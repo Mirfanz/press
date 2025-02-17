@@ -35,7 +35,7 @@ export async function GET(request: NextRequest) {
       appwriteConfig.db_id,
       "tax",
       ID.unique(),
-      data
+      data,
     );
 
     console.log("result", result2);

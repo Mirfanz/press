@@ -6,36 +6,35 @@ import {
   NavbarMenu,
   NavbarMenuToggle,
   NavbarBrand,
-  NavbarItem,
 } from "@heroui/navbar";
 import { button as buttonStyle } from "@heroui/theme";
 import NextLink from "next/link";
 import clsx from "clsx";
-import { usePathname } from "next/navigation";
+import { Avatar } from "@heroui/react";
 
 import { useAuth } from "./auth-provider";
+import { SideBarContent } from "./sidebar";
 
-import { siteConfig } from "@/config/site";
 import { ThemeSwitch } from "@/components/theme-switch";
 
-const Navbar = () => {
-  const pathname = usePathname();
-
-  if (pathname.startsWith("/auth")) return <NavbarAuth />;
-
-  return <NavbarSite />;
+const Navbar = ({ fullContent = false }: { fullContent?: boolean }) => {
+  return fullContent ? <NavbarSite /> : <NavbarAuth />;
 };
 
 export default Navbar;
 
 const NavbarSite = () => {
-  const pathname = usePathname();
   const auth = useAuth();
 
   return (
-    <NextUINavbar maxWidth="xl" position="sticky">
+    <NextUINavbar
+      shouldHideOnScroll
+      className="lg:bg-slate-50 lg:dark:bg-slate-950"
+      maxWidth="xl"
+      position="sticky"
+    >
       <NavbarContent>
-        <NavbarBrand>
+        <NavbarBrand className="lg:hidden">
           <NextLink className="flex items-center gap-1" href="/">
             <svg className="w-8 h-8" fill="none" viewBox="0 0 32 32">
               <path
@@ -48,53 +47,31 @@ const NavbarSite = () => {
             <h2 className="font-bold text-inherit">PRESS II</h2>
           </NextLink>
         </NavbarBrand>
-        <NavbarContent className="hidden lg:flex" justify="center">
-          {siteConfig.navItems.map((item) => (
-            <NavbarItem key={item.href}>
-              <NextLink
-                className={clsx(
-                  "font-normal text-foreground hover:opacity-80 duration-150 data-[active=true]:text-primary data-[active=true]:font-semibold",
-                )}
-                data-active={pathname === item.href}
-                href={item.href}
-              >
-                {item.label}
-              </NextLink>
-            </NavbarItem>
-          ))}
-        </NavbarContent>
-        <NavbarContent justify="end">
-          <ThemeSwitch />
-          <NavbarMenuToggle
-            className={clsx(
-              "md:hidden",
-              buttonStyle({
-                variant: "flat",
-                isIconOnly: true,
-                radius: "sm",
-              }),
-            )}
+        <div className="hidden lg:flex items-center gap-2">
+          <Avatar
+            size="sm"
+            src={auth.user?.prefs.image_url || "/default-profile.png"}
           />
-        </NavbarContent>
-        <NavbarMenu className="gap-3">
-          {siteConfig.navItems.map((item) => (
-            <NavbarItem key={item.href}>
-              <NextLink
-                className={clsx(
-                  "font-normal text-foreground hover:opacity-80 duration-150 data-[active=true]:text-primary data-[active=true]:font-semibold",
-                )}
-                data-active={pathname === item.href}
-                href={item.href}
-              >
-                {item.label}
-              </NextLink>
-            </NavbarItem>
-          ))}
-          <NavbarItem className="text-danger" onClick={auth.logout}>
-            Logout
-          </NavbarItem>
-        </NavbarMenu>
+          <h4 className="font-medium">{auth.user?.name}</h4>
+        </div>
       </NavbarContent>
+
+      <NavbarContent justify="end">
+        <ThemeSwitch />
+        <NavbarMenuToggle
+          className={clsx(
+            "lg:hidden",
+            buttonStyle({
+              variant: "flat",
+              isIconOnly: true,
+              radius: "sm",
+            }),
+          )}
+        />
+      </NavbarContent>
+      <NavbarMenu className="p-3">
+        <SideBarContent />
+      </NavbarMenu>
     </NextUINavbar>
   );
 };

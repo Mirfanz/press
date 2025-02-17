@@ -15,7 +15,7 @@ import AddReport from "./add-report";
 import ReportCard from "./report-card";
 
 import { FinanceReportType } from "@/types";
-import { compareDate, formatDate, formatIDR } from "@/lib/utils";
+import { compareMonth, formatDate, formatIDR } from "@/lib/utils";
 
 let lastDate = new Date();
 
@@ -106,7 +106,7 @@ const Cash = () => {
             {data?.map((item, index) => {
               const currentDate = new Date(item.date);
               const showDate =
-                compareDate(currentDate, lastDate) == "older" || index == 0;
+                compareMonth(currentDate, lastDate) == "older" || index == 0;
 
               lastDate = currentDate;
 
