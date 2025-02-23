@@ -25,7 +25,7 @@ export default function SiteLayout({
   return (
     <div className="relative flex flex-col h-dvh">
       <div className="flex flex-grow">
-        <div className="min-w-64 w-64 bg-slate-100 dark:bg-slate-900 hidden lg:block sticky top-0 h-dvh overflow-hidden">
+        <div className="min-w-64 w-64 bg-slate-100 dark:bg-slate-900 hidden md:block sticky top-0 h-dvh overflow-hidden">
           <Link className="flex items-center gap-1 m-4" href="/">
             <svg className="w-8 h-8" fill="none" viewBox="0 0 32 32">
               <path
@@ -47,9 +47,9 @@ export default function SiteLayout({
             @mirfanz_
           </Link>
         </div>
-        <div className="flex-grow">
+        <div className="flex-grow relative">
           <Navbar fullContent />
-          <div className="px-3 lg:px-6 py-3">
+          <div className="px-3 md:px-6 pt-3 ">
             <Suspense fallback={<Loading />}>{children}</Suspense>
           </div>
         </div>

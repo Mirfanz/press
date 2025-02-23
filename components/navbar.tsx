@@ -29,12 +29,12 @@ const NavbarSite = () => {
   return (
     <NextUINavbar
       shouldHideOnScroll
-      className="lg:bg-slate-50 lg:dark:bg-slate-950"
+      className="md:bg-slate-50 md:dark:bg-slate-950"
       maxWidth="xl"
       position="sticky"
     >
       <NavbarContent>
-        <NavbarBrand className="lg:hidden">
+        <NavbarBrand className="md:hidden">
           <NextLink className="flex items-center gap-1" href="/">
             <svg className="w-8 h-8" fill="none" viewBox="0 0 32 32">
               <path
@@ -47,7 +47,7 @@ const NavbarSite = () => {
             <h2 className="font-bold text-inherit">PRESS II</h2>
           </NextLink>
         </NavbarBrand>
-        <div className="hidden lg:flex items-center gap-2">
+        <div className="hidden md:flex items-center gap-2">
           <Avatar
             size="sm"
             src={auth.user?.prefs.image_url || "/default-profile.png"}
@@ -60,12 +60,12 @@ const NavbarSite = () => {
         <ThemeSwitch />
         <NavbarMenuToggle
           className={clsx(
-            "lg:hidden",
+            "md:hidden",
             buttonStyle({
               variant: "flat",
               isIconOnly: true,
               radius: "sm",
-            }),
+            })
           )}
         />
       </NavbarContent>

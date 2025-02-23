@@ -1,6 +1,6 @@
 "use client";
 
-import { Button } from "@heroui/button";
+import { Button, Link as HeroLink } from "@heroui/react";
 import {
   BadgeDollarSignIcon,
   CalendarClockIcon,
@@ -14,6 +14,7 @@ import { usePathname } from "next/navigation";
 import React from "react";
 
 import { useAuth } from "./auth-provider";
+import clsx from "clsx";
 
 export const SideBarContent = () => {
   const pathname = usePathname();
@@ -32,7 +33,7 @@ export const SideBarContent = () => {
     {
       icon: <CalendarClockIcon className="w-4 h-4" />,
       label: "Jadwal Kerja",
-      href: "#",
+      href: "/schedule",
     },
     {
       icon: <CodeSquareIcon className="w-4 h-4" />,
@@ -52,7 +53,10 @@ export const SideBarContent = () => {
         <Button
           key={"nav-item-" + i.href}
           as={Link}
-          className="justify-start"
+          className={clsx(
+            "justify-start rounded-none",
+            pathname == i.href ? "border-l-2 border-solid border-primary" : ""
+          )}
           href={i.href}
           startContent={i.icon}
           variant={pathname == i.href ? "flat" : "light"}

@@ -14,23 +14,23 @@ export const ThemeSwitch = () => {
   return (
     <>
       <Button
-        className="hidden lg:flex capitalize"
+        className="hidden md:flex capitalize"
         radius="full"
         size="sm"
         variant="flat"
         onPress={onChange}
       >
         {theme == "dark" ? (
-          <MoonStarIcon className="w-4 h-4" />
-        ) : (
           <SunIcon className="w-4 h-4" />
+        ) : (
+          <MoonStarIcon className="w-4 h-4" />
         )}
-        {theme}
+        {theme == "dark" ? "light" : "dark"}
       </Button>
 
       <Button
         isIconOnly
-        className="lg:hidden"
+        className="md:hidden"
         radius="full"
         variant="light"
         onPress={onChange}

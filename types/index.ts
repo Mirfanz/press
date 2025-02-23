@@ -44,3 +44,10 @@ export type UserType = {
     image_url?: string;
   };
 };
+
+export type ScheduleType = {
+  $id: string;
+  label: string;
+  image_url: string;
+  $createdAt: string;
+};

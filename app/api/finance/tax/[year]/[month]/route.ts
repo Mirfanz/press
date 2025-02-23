@@ -3,11 +3,11 @@ import { Query } from "node-appwrite";
 
 import { appwriteConfig } from "@/config/appwrite";
 import { db, users } from "@/lib/appwrite-admin";
-import { TaxType } from "@/types";
+import { TaxType, UserType } from "@/types";
 
 export async function GET(
   req: NextRequest,
-  { params }: { params: Promise<{ year: string; month: string }> },
+  { params }: { params: Promise<{ year: string; month: string }> }
 ) {
   try {
     const { year, month } = await params;
@@ -32,30 +32,23 @@ export async function GET(
       $updatedAt: result.$updatedAt,
     };
 
-    if (result.users.length)
-      data.users = (
-        await users.list([Query.contains("$id", result.users), Query.limit(50)])
-      ).users.map(({ $id, name, labels, prefs, status }) => ({
-        $id,
-        name,
-        labels,
-        prefs,
-        status,
-      }));
-
-    if (result.paidUsers.length) {
-      data.paidUsers = (
-        await users.list([
-          Query.contains("$id", result.paidUsers),
+    if (result.users.length || result.paidUsers.length) {
+      const newUsers: UserType[] = [];
+      const newPaidUsers: UserType[] = [];
+      await users
+        .list([
+          Query.contains("$id", [...result.users, ...result.paidUsers]),
           Query.limit(50),
         ])
-      ).users.map(({ $id, name, labels, prefs, status }) => ({
-        $id,
-        name,
-        labels,
-        prefs,
-        status,
-      }));
+        .then((data) => {
+          data.users.forEach(({ $id, name, labels, prefs, status }) => {
+            result.users.includes($id)
+              ? newUsers.push({ $id, name, labels, prefs, status })
+              : newPaidUsers.push({ $id, name, labels, prefs, status });
+          });
+        });
+      data.users = newUsers;
+      data.paidUsers = newPaidUsers;
     }
 
     return NextResponse.json({ success: true, data });

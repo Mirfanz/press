@@ -1,6 +1,6 @@
 "use client";
 
-import { Client, Account } from "appwrite";
+import { Client, Account, Storage } from "appwrite";
 
 import { appwriteConfig } from "@/config/appwrite";
 
@@ -9,3 +9,5 @@ const client = new Client()
   .setProject(appwriteConfig.projectId);
 
 export const account = new Account(client);
+
+export const storage = new Storage(client);
