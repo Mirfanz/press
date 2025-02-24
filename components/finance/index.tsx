@@ -16,6 +16,7 @@ import ReportCard from "./report-card";
 
 import { FinanceReportType } from "@/types";
 import { compareMonth, formatDate, formatIDR } from "@/lib/utils";
+import Header from "../header";
 
 let lastDate = new Date();
 
@@ -60,7 +61,7 @@ const Cash = () => {
     let total = 0;
 
     data?.map((item) =>
-      item.income ? (total += item.amount) : (total -= item.amount),
+      item.income ? (total += item.amount) : (total -= item.amount)
     );
     setBalance(total);
   }, [data]);
@@ -75,24 +76,27 @@ const Cash = () => {
       </Card>
 
       <section className="mt-6">
-        <div className="flex items-center justify-between mb-4 mx-1">
-          <h5 className="font-semibold">Laporan Keuangan</h5>
-          {hasRole("bendahara") ? (
-            <Button size="sm" onPress={() => setModalAddReportOpen(true)}>
-              <PlusIcon className="w-4 h-4" /> Tambah
-            </Button>
-          ) : (
-            <Button
-              isDisabled
-              isIconOnly
-              radius="full"
-              size="sm"
-              variant="light"
-            >
-              <AlertCircle className="w-4 h-4" />
-            </Button>
-          )}
-        </div>
+        <Header
+          title="Laporan Keuangan"
+          endContent={
+            hasRole("bendahara") ? (
+              <Button size="sm" onPress={() => setModalAddReportOpen(true)}>
+                <PlusIcon className="w-4 h-4" /> Tambah
+              </Button>
+            ) : (
+              <Button
+                isDisabled
+                isIconOnly
+                radius="full"
+                size="sm"
+                variant="light"
+              >
+                <AlertCircle className="w-4 h-4" />
+              </Button>
+            )
+          }
+        />
+
         {isLoading ? (
           <Loading />
         ) : error ? (
@@ -116,7 +120,7 @@ const Cash = () => {
                     <h5
                       className={clsx(
                         "text-sm font-medium",
-                        index > 0 && "mt-3",
+                        index > 0 && "mt-3"
                       )}
                     >
                       {formatDate(currentDate)}
@@ -128,7 +132,7 @@ const Cash = () => {
                       data={item}
                       toggleActive={() =>
                         setActiveReport((prev) =>
-                          prev == item.$id ? undefined : item.$id,
+                          prev == item.$id ? undefined : item.$id
                         )
                       }
                     />

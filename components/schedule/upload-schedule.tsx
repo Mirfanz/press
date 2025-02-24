@@ -113,8 +113,8 @@ const UploadSchedule = (props: Props) => {
     >
       <Form onSubmit={handleSubmit}>
         <ModalContent>
-          <ModalBody>
-            <div className="aspect-square relative w-full overflow-hidden bg-foreground-100 text-foreground-300 flex justify-center items-center rounded-xl my-2">
+          <ModalBody className="mt-4">
+            <div className="aspect-square relative w-full overflow-hidden bg-foreground-100 text-foreground-300 flex justify-center items-center rounded-xl">
               {imagePreview ? (
                 <Image
                   src={imagePreview}

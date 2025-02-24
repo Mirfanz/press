@@ -14,6 +14,8 @@ import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import Loading from "../loading";
 import UploadSchedule from "./upload-schedule";
+import Header from "../header";
+import Link from "next/link";
 
 const Schedule: React.FC = () => {
   const auth = useAuth();
@@ -26,43 +28,39 @@ const Schedule: React.FC = () => {
   });
   return (
     <main className="">
-      <div className="flex justify-between items-center mb-6">
-        <h1 className="text-lg md:text-2xl font-bold flex items-center gap-2">
-          <CalendarDaysIcon className="h-5 w-5 md:w-6 md:h-6" /> Schedule Kerja
-        </h1>
-        <Button
-          className="hidden md:flex"
-          startContent={<PlusSquareIcon className="w-4 h-4" />}
-          onPress={() => setIsUploadOpen(true)}
-          color="primary"
-        >
-          Tambah
-        </Button>
-        <Button
-          className="md:hidden"
-          size="sm"
-          onPress={() => setIsUploadOpen(true)}
-          startContent={<PlusSquareIcon className="w-5 h-5" />}
-        >
-          Tambah
-        </Button>
-      </div>
+      <Header
+        icon={<CalendarDaysIcon className="h-5 w-5 md:w-6 md:h-6" />}
+        title="Schedule Kerja"
+        endContent={
+          auth.hasRole("bendahara") && (
+            <Button
+              size="sm"
+              color="primary"
+              onPress={() => setIsUploadOpen(true)}
+              startContent={<PlusIcon className="w-4 h-4" />}
+            >
+              Tambah
+            </Button>
+          )
+        }
+      />
+
       {isLoading ? (
         <Loading />
       ) : (
         <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-4">
           {data?.map((item: ScheduleType) => (
-            <Card key={item.$id} className="shadow-md">
+            <Card
+              key={item.$id}
+              className=""
+              isHoverable
+              isPressable
+              as={Link}
+              href={item.image_url}
+              target="_blank"
+            >
               <CardHeader className="">
                 <h3 className="text-center py-1 mx-auto">{item.label}</h3>
-                <Button
-                  isIconOnly
-                  variant="light"
-                  className="absolute right-3"
-                  size="sm"
-                >
-                  <ArrowDownToLineIcon className="w-5 h-5 text-foreground-500" />
-                </Button>
               </CardHeader>
               <Image
                 className="aspect-square object-cover object-top"

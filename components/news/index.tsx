@@ -1,8 +1,12 @@
 "use client";
 
-import { Card, CardFooter, Image } from "@heroui/react";
+import { Button, Card, CardFooter, Image } from "@heroui/react";
+import { CalendarDaysIcon, NewspaperIcon, PlusIcon } from "lucide-react";
+import { useAuth } from "../auth-provider";
+import Header from "../header";
 
 const News = () => {
+  const auth = useAuth();
   const fakeNews: {
     $id: string;
     title: string;
@@ -104,6 +108,21 @@ const News = () => {
 
   return (
     <main>
+      <Header
+        icon={<NewspaperIcon className="h-5 w-5 md:w-6 md:h-6" />}
+        title={"Informasi Terbaru"}
+        endContent={
+          auth.hasRole("bendahara") && (
+            <Button
+              size="sm"
+              color="primary"
+              startContent={<PlusIcon className="w-4 h-4" />}
+            >
+              Tambah
+            </Button>
+          )
+        }
+      />
       <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
         {fakeNews.map((news) => (
           <Card

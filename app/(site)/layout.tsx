@@ -49,7 +49,7 @@ export default function SiteLayout({
         </div>
         <div className="flex-grow relative">
           <Navbar fullContent />
-          <div className="px-3 md:px-6 pt-3 ">
+          <div className="px-3 md:px-6 pt-3 mb-4">
             <Suspense fallback={<Loading />}>{children}</Suspense>
           </div>
         </div>
