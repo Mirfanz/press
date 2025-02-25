@@ -32,7 +32,7 @@ const Schedule: React.FC = () => {
         icon={<CalendarDaysIcon className="h-5 w-5 md:w-6 md:h-6" />}
         title="Schedule Kerja"
         endContent={
-          auth.hasRole("bendahara") && (
+          auth.hasRole("leader", "subleader") && (
             <Button
               size="sm"
               color="primary"

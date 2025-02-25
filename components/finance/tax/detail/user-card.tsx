@@ -1,6 +1,6 @@
 "use client";
 
-import { Button, Card, CardBody, User } from "@heroui/react";
+import { Badge, Button, Card, CardBody, User } from "@heroui/react";
 import clsx from "clsx";
 import React, { useEffect, useState } from "react";
 import axios from "axios";
@@ -32,58 +32,64 @@ const UserCard = ({
     setIsPaid(ispaid);
   }, [ispaid]);
 
+  if (!isVisible) return;
   return (
-    <Card
-      isHoverable
-      isPressable
-      className={clsx(
-        "w-full ring-1 ring-inset",
-        isPaid ? "ring-success order-2" : "ring-danger order-1",
-        !isVisible && "hidden",
-      )}
+    <Badge
+      content={"Sudah Lunas"}
+      isInvisible={!isPaid}
+      className="right-11"
+      size="sm"
     >
-      <CardBody className="flex-row justify-between items-center">
-        <User
-          avatarProps={{
-            src: user.prefs.image_url || "/default-profile.png",
-          }}
-          className="justify-start"
-          description={user.$id}
-          name={user.name}
-        />
-        {!isPaid && hasRole("bendahara") && (
-          <Button
-            className=""
-            isLoading={loading}
-            size="sm"
-            onPress={() => {
-              Swal.fire({
-                icon: "warning",
-                text: `Konfirmasi ${user.name} (${user.$id}) sudah membayar kas`,
-                showCancelButton: true,
-                confirmButtonText: "Ya, Sudah",
-                cancelButtonText: "Batal",
-              }).then((resp) => {
-                if (!resp.isConfirmed) return;
-                setLoading(true);
-                axios
-                  .post("/api/finance/tax", {
-                    taxId,
-                    userId: user.$id,
-                  })
-                  .then((resp) => {
-                    console.log("resp", resp);
-                    if (resp.data.success) setIsPaid(true);
-                  })
-                  .finally(() => setLoading(false));
-              });
+      <Card
+        isHoverable
+        isPressable
+        fullWidth
+        className={clsx(isPaid && "order-1")}
+      >
+        <CardBody className="flex-row justify-between items-center">
+          <User
+            avatarProps={{
+              src: user.prefs.image_url || "/default-profile.png",
             }}
-          >
-            Konfirmasi
-          </Button>
-        )}
-      </CardBody>
-    </Card>
+            className={clsx("justify-start")}
+            description={user.$id}
+            name={user.name}
+          />
+          {!isPaid && hasRole("bendahara") && (
+            <Button
+              className=""
+              isLoading={loading}
+              size="sm"
+              color="primary"
+              onPress={() => {
+                Swal.fire({
+                  icon: "warning",
+                  text: `Konfirmasi ${user.name} (${user.$id}) sudah membayar kas`,
+                  showCancelButton: true,
+                  confirmButtonText: "Ya, Lanjut",
+                  cancelButtonText: "Batal",
+                }).then((resp) => {
+                  if (!resp.isConfirmed) return;
+                  setLoading(true);
+                  axios
+                    .post("/api/finance/tax", {
+                      taxId,
+                      userId: user.$id,
+                    })
+                    .then((resp) => {
+                      console.log("resp", resp);
+                      if (resp.data.success) setIsPaid(true);
+                    })
+                    .finally(() => setLoading(false));
+                });
+              }}
+            >
+              Lunas
+            </Button>
+          )}
+        </CardBody>
+      </Card>
+    </Badge>
   );
 };
 

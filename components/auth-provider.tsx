@@ -24,7 +24,7 @@ const AuthContext = createContext<{
   logout: () => void;
   login: (
     email: string,
-    password: string,
+    password: string
   ) => Promise<{ success: boolean; message: string }>;
   loadingUser: boolean;
   loadingLogin: boolean;
@@ -40,6 +40,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [logoutModalOpen, setLogOutModalOpen] = useState(false);
 
   const hasRole = (...role: string[]) => {
+    if (user?.labels.includes("admin")) return true;
     for (let i = 0; i < role.length; i++) {
       if (user?.labels.includes(role[i])) return true;
     }

@@ -11,7 +11,7 @@ export async function POST(request: NextRequest) {
     const session = await account.createEmailPasswordSession(email, password);
     const res = NextResponse.json(
       { success: true, message: "Login berhasil", secret: session.secret },
-      { status: 200 },
+      { status: 200 }
     );
 
     res.cookies.set("session", session.secret, {
@@ -28,7 +28,7 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json(
       { success: false, message: e.message },
-      { status: 400 },
+      { status: 400 }
     );
   }
 }
