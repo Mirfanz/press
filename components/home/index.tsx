@@ -30,21 +30,10 @@ const Home = () => {
           className="mb-3"
           description="Bayar apa mau dipecat?"
           variant="faded"
-          color="warning"
+          // color="warning"
           // description="Bayar kalau gamau dipecatt"
           title="Belum Bayar Kas"
         />
-        <div className="flex items-center justify-between mb-3 mx-1">
-          <h5 className="font-semibold">Laporan Keuangan</h5>
-          <Link href="/finance" size="sm">
-            Lainnya
-          </Link>
-        </div>
-        <div className="flex flex-col gap-3">
-          {data?.map((item) => (
-            <ReportCard key={"home-" + item.$id} data={item} />
-          ))}
-        </div>
       </section>
     </main>
   );

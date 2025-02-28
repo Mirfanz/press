@@ -14,59 +14,83 @@ import {
   ModalHeader,
   Skeleton,
 } from "@heroui/react";
-import { LogOutIcon } from "lucide-react";
+import {
+  LogOutIcon,
+  MailIcon,
+  PhoneCallIcon,
+  PhoneIcon,
+  ShieldAlert,
+  ShieldAlertIcon,
+  ShieldCheckIcon,
+  User2Icon,
+  UserCircle2Icon,
+} from "lucide-react";
 
 import { useAuth } from "../auth-provider";
 
 const UserCard = () => {
   const { user, logout } = useAuth();
-  const [detailOpen, setDetailOpen] = useState(false);
+  const [detailOpen, setDetailOpen] = useState(true);
 
   return (
     <>
-      <Card>
+      <Card fullWidth>
         <CardBody>
-          {user ? (
-            <div className="flex items-center space-x-4">
+          <div className="flex gap-3">
+            <div className="h-36 aspect-square">
               <Avatar
                 alt="User Profile"
-                className="w-16 h-16"
-                src={user.prefs.image_url || "/default-profile.png"}
+                radius="md"
+                className="w-full h-full"
+                src={user?.prefs.image_url || "/default-profile.png"}
               />
-              <div>
-                <h2 className="text-xl font-semibold">{user.name}</h2>
-                <p className="text-foreground-500">{user.$id}</p>
+            </div>
+            <div className="flex flex-col justify-evenly">
+              <h5 className="text-base font-semibold">{user?.name}</h5>
+              <div className="flex flex-col gap-1">
+                <p className="flex items-center text-foreground-600">
+                  <MailIcon className="w-4 h-4 me-2" />
+                  <small>{user?.email}</small>
+                </p>
+                <p className="flex items-center text-foreground-600">
+                  <UserCircle2Icon className="w-4 h-4 me-2" />
+                  <small> {user?.$id}</small>
+                </p>
+                <p className="flex items-center text-foreground-600">
+                  <PhoneCallIcon className="w-4 h-4 me-2" />
+                  <small> {user?.phone || <i>Tidak Ada</i>}</small>
+                </p>
+                <p className="flex items-center text-foreground-600">
+                  <ShieldCheckIcon className="w-4 h-4 me-2" />
+                  <small> {user?.labels.join(",")}</small>
+                </p>
               </div>
             </div>
-          ) : (
-            <div className="flex items-center space-x-4">
-              <Skeleton className="w-16 h-16 rounded-full" />
-              <div>
-                <Skeleton className="w-48 h-6 mb-2" />
-                <Skeleton className="w-36 h-4" />
-              </div>
+          </div>
+
+          {detailOpen && (
+            <div className="mt-3 flex flex-col gap-2">
+              <Button fullWidth className="">
+                Ganti Foto
+              </Button>
+              <Button fullWidth className="">
+                Ganti Password
+              </Button>
+              <Button
+                onPress={logout}
+                fullWidth
+                color="danger"
+                variant="faded"
+                className=""
+              >
+                Keluar
+              </Button>
             </div>
           )}
-          <div className="mt-4 flex items-center justify-end gap-2">
-            <Button fullWidth className="" onPress={() => setDetailOpen(true)}>
-              Detail
-            </Button>
-            <Button fullWidth className="">
-              Edit
-            </Button>
-            <Button
-              fullWidth
-              color="danger"
-              startContent={<LogOutIcon className="w-4 h-4" />}
-              onPress={logout}
-            >
-              Keluar
-            </Button>
-          </div>
         </CardBody>
       </Card>
 
-      <Modal isOpen={detailOpen} onClose={() => setDetailOpen(false)}>
+      <Modal isOpen={false} onClose={() => setDetailOpen(false)}>
         <ModalContent>
           <ModalHeader>Informasi Akun</ModalHeader>
           <Divider />

@@ -40,11 +40,6 @@ export const SideBarContent = () => {
       label: "Kas Bulanan",
       href: "/finance/tax",
     },
-    {
-      icon: <NewspaperIcon className="w-4 h-4" />,
-      label: "Informasi",
-      href: "/news",
-    },
   ];
 
   return (
