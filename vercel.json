@@ -1,7 +1,7 @@
 {
   "crons": [
     {
-      "path": "/api/cron",
+      "path": "/api/cron/finance/tax",
       "schedule": "0 1 1 */1 *"
     }
   ]

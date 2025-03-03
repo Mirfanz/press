@@ -11,15 +11,6 @@ import UserCard from "./user-card";
 import { FinanceReportType } from "@/types";
 
 const Home = () => {
-  const { data } = useQuery({
-    queryKey: ["finane-report"],
-    queryFn: async (): Promise<FinanceReportType[]> => {
-      const response = await axios.get("/api/finance/report");
-
-      return response.data.data.slice(0, 3);
-    },
-  });
-
   return (
     <main>
       <UserCard />
